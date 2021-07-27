@@ -1,25 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ChessBoard, Header, Game, HeroPage, LogIn, SignUp} from "./components";
+
+import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      
+      <Switch>
+        <Route exact path="/test">
+          <Header active = {1}/>
+          <div className="bg-blue-400 w-full text-center">
+            <ChessBoard sideLength={70} />
+            <Game />
+          </div>
+        </Route>
+        <Route exact path = "/log-in">
+          <Header active = {2}/>
+          <LogIn/>
+        </Route>
+        <Route exact path = "/sign-up">
+          <Header active = {2}/>
+          <SignUp/>
+        </Route>
+        <Route path = "/">
+          <Header active = {0}/>
+          <HeroPage/>
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
