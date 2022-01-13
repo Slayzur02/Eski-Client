@@ -26,7 +26,8 @@ function boardTranslateNumbersToLetters(numberizedBoardState: {number: number}):
   return translatedBoardState;
 }
 
-function renewBoard(firstBoard: ChessPiecesInfo, secondBoard: ChessPiecesInfo) {
+// helper function for chessboard
+function shouldUpdateBoard(firstBoard: ChessPiecesInfo, secondBoard: ChessPiecesInfo) {
   for (let square in firstBoard) {
     if (!(square in secondBoard)) {
       return true
@@ -35,4 +36,4 @@ function renewBoard(firstBoard: ChessPiecesInfo, secondBoard: ChessPiecesInfo) {
   return false
 }
 
-export {PieceToPNGString, PieceToOneLetterRep, boardTranslateNumbersToLetters, renewBoard}
+export {PieceToPNGString, PieceToOneLetterRep, boardTranslateNumbersToLetters, shouldUpdateBoard}

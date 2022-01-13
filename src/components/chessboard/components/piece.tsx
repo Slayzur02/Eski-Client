@@ -11,15 +11,17 @@ interface Props {
 
 
 export default function Piece({ piece, square, size}: Props) {
+  // preview options when dragging for the UI
   const previewOptions = {
     offsetX: 0,
     offsetY: 0,
   }
 
+  // configures dragging mechanic
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     previewOptions,
     type: ItemTypes.CHESSPIECE,
-    item: { square },
+    item: { square }, 
     collect: (moniter) => ({
       isDragging: !!moniter.isDragging(),
     }),

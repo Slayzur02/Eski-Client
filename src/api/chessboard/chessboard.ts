@@ -15,14 +15,14 @@ let connect = (updateValidMoves, updateBoard) => {
     const newBoardState = JSON.parse(msg.data);
 		console.log(msg.data)
 
-    const numberizedBoardState = newBoardState["Board"];
+    const numberizedBoardState = newBoardState["BoardAndMoves"]["Board"];
     let translated = {};
     if (numberizedBoardState !== null && numberizedBoardState !== null) {
       translated = boardTranslateNumbersToLetters(numberizedBoardState);
     }
 
 		updateBoard(translated)
-		updateValidMoves(newBoardState["ValidMoves"])
+		updateValidMoves(newBoardState["BoardAndMoves"]["ValidMoves"])
   };
 
   socket.onclose = () => {

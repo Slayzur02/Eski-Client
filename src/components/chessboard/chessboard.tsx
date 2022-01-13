@@ -6,6 +6,7 @@ import {
   BlackBoardSquares,
   BoardSquares,
   ChessPiece,
+  ChessPiecesInfo,
   ChessStartingPosition,
   Color,
 } from "../../utils/chessboard/types-constants";
@@ -21,7 +22,7 @@ import {
   sendPieceMove,
   sendPiecePromotion,
 } from "../../api/chessboard/chessboard";
-import { renewBoard } from "../../utils/chessboard/functions";
+import { shouldUpdateBoard } from "../../utils/chessboard/functions";
 /**
  * Interface
  */
@@ -29,6 +30,7 @@ interface BoardProps {
   sideLength?: number;
   measurer?: string;
 }
+
 
 export default function Board({
   sideLength = 50,
@@ -40,24 +42,33 @@ export default function Board({
   const [promoting, setPromoting] = useState(null);
   const [playerColorBoard, setPlayerColorBoard] = useState(BoardSquares)
  
+  // updates the valid moves (from websocket backend)
   const updateValidMoves = (validMoveList: string[]) => {
     setPossibleMoves(validMoveList);
   };
 
+  // checks if board needs updating with `renewBoard`
+  // and then if there are differences, update - used mainly for castling + en-pessant
   const considerUpdatingBoard = (newBoard) => {
-    const shouldUpdate = renewBoard(boardState, newBoard)
+    const shouldUpdate = shouldUpdateBoard(boardState, newBoard)
     if (shouldUpdate) {
       setBoardState(newBoard)
     }
   }
 
+  // pass to websocket at the start 
   useEffect(() => {
     connect(updateValidMoves, considerUpdatingBoard);
   }, []);
 
+
+  // checks if moves are valid
   const isValidMove = (startSquare: string, endSquare: string) => {
     return possibleMoves.includes(startSquare + endSquare);
   };
+
+
+
   /**
    * Handles the updating of the board from a single piece movement
    * Will delay it if it's promotion
@@ -157,9 +168,9 @@ export default function Board({
                       <Piece
                         piece={boardState[square]}
                         square={square}
-                        // square is c2
                         size={length}
                       />
+                      {/* if we're promoting, add promotion picer */}
                       {promoting && promoting.endSquare === square ? (
                         <PromotionPicker
                           length={sideLength}
